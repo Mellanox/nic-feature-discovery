@@ -1,0 +1,18 @@
+version: '3'
+
+vars:
+  DOCKER_CMD: docker
+  DOCKERFILE: Dockerfile
+
+tasks:
+  build:
+    desc: build container image
+    requires:
+      vars: [IMAGE_NAME_FULL, DOCKERFILE]
+    cmd: "{{.DOCKER_CMD}} build -t {{.IMAGE_NAME_FULL}} -f {{.DOCKERFILE}} ."
+  
+  push:
+    desc: push container image
+    requires:
+      vars: [IMAGE_NAME_FULL]
+    cmd: "{{.DOCKER_CMD}} push {{.IMAGE_NAME_FULL}}"

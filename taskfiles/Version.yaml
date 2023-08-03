@@ -1,0 +1,25 @@
+version: '3'
+
+vars:
+  DATE:
+    sh: date -u --iso-8601=seconds
+  # get last commit ID
+  COMMIT:
+    sh: git rev-parse --verify HEAD
+  # Tree state is "dirty" if there are uncommitted changes, untracked files are ignored
+  GIT_TREE_STATE:
+    sh: test -n "`git status --porcelain --untracked-files=no`" && echo "dirty" || echo "clean"
+  # Empty string if we are not building a tag
+  GIT_TAG:
+    sh: git describe --tags --abbrev=0 --exact-match 2>/dev/null || true
+  # Find most recent tag
+  GIT_TAG_LAST: 
+    sh: git describe --tags --abbrev=0 2>/dev/null || true
+  VERSION: "{{.VERSION | default .GIT_TAG_LAST}}"
+  RELEASE_STATUS:
+    sh: echo '{{if or (ne .GIT_TAG "") (ne .VERSION .GIT_TAG_LAST)}},released{{end}}'
+  VERSION_LDFLAGS: -X github.com/Mellanox/nic-feature-discovery/pkg/utils/version.version={{.VERSION}}
+    -X github.com/Mellanox/nic-feature-discovery/pkg/utils/version.commit={{.COMMIT}}
+    -X github.com/Mellanox/nic-feature-discovery/pkg/utils/version.gitTreeState={{.GIT_TREE_STATE}}
+    -X github.com/Mellanox/nic-feature-discovery/pkg/utils/version.releaseStatus={{.RELEASE_STATUS}}
+    -X github.com/Mellanox/nic-feature-discovery/pkg/utils/version.date={{.DATE}}

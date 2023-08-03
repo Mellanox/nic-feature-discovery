@@ -1,0 +1,33 @@
+version: '3'
+
+vars:
+  BIN_DIR: "{{.ROOT_DIR}}"
+
+tasks:
+  go-install:
+    desc: installs go binary
+    internal: true
+    requires:
+      vars: [BIN_NAME, BIN_DIR, GO_REPO_PATH, VER]
+    cmd: GOBIN={{.BIN_DIR}} go install {{.GO_REPO_PATH}}@{{.VER}}
+    status:
+      - test -f {{.BIN_DIR}}/{{.BIN_NAME}}
+
+  golangci-lint:
+    desc: install golangci-lint
+    cmds:
+      - task: go-install
+        vars:
+          BIN_NAME: golangci-lint
+          GO_REPO_PATH: github.com/golangci/golangci-lint/cmd/golangci-lint
+          VER: v1.53.3
+          BIN_DIR: "{{.BIN_DIR}}"
+
+  mockery:
+    desc: install mockery
+    cmds:
+      - task: go-install
+        vars:
+          BIN_NAME: mockery
+          GO_REPO_PATH: github.com/vektra/mockery/v2
+          VER: v2.32.2

@@ -1,0 +1,11 @@
+version: '3'
+
+vars:
+  KIND_CLUSTER:  kind
+
+tasks:
+  load-image:
+    desc: load image to kind cluster
+    requires:
+      vars: ["IMAGE_NAME_FULL"]
+    cmd: kind load docker-image --name {{KIND_CLUSTER}} {{IMAGE_NAME_FULL}}

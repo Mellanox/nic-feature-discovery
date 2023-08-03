@@ -1,0 +1,89 @@
+version: "3"
+
+set: [pipefail, e]
+
+shopt: [globstar, nullglob]
+
+output: 
+  group:
+    begin: '::group::{{.TASK}}'
+    end: '::endgroup::'
+
+vars:
+  # Proj related vars
+  PROJECT_DIR: "{{.USER_WORKING_DIR}}"
+  BUILD_DIR: "{{.PROJECT_DIR}}/build"
+  LOCAL_BIN: "{{.PROJECT_DIR}}/bin"
+  # Image related vars
+  IMAGE_REGISTRY: "ghcr.io/mellanox"
+  IMAGE_REPOSITORY: "nic-feature-discovery"
+  IMAGE_TAG: "latest"
+  IMAGE_NAME_FULL: "{{.IMAGE_REGISTRY}}/{{.IMAGE_REPOSITORY}}:{{.IMAGE_TAG}}"
+  # Coverage related vars
+  COVER_PROFILE: "{{.PROJECT_DIR}}/nic-feature-discovery.cover"
+
+includes:
+  version: ./taskfiles/Version.yaml
+  install:
+    taskfile: ./taskfiles/InstallDeps.yaml
+    vars:
+      BIN_DIR: "{{.LOCAL_BIN}}"
+  kind: ./taskfiles/Kind.yaml
+  image: ./taskfiles/Image.yaml
+
+tasks:
+  clean:
+    desc: remove downloaded tools and compiled binaries
+    cmd: |
+      rm -rf {{.LOCAL_BIN}}
+      rm -rf {{.BUILD_DIR}}
+      rm -f {{.COVER_PROFILE}}
+  
+  create-dirs:
+    desc: prepare build related directories
+    internal: true
+    cmds:
+      - mkdir -p {{.LOCAL_BIN}}
+      - mkdir -p {{.BUILD_DIR}}
+    status:
+      - test -d {{.LOCAL_BIN}}
+      - test -d {{.BUILD_DIR}}
+
+  build:
+    desc: build nic-feature-discovery binary
+    deps:
+      - task: create-dirs
+    vars:
+      GO_BUILD_OPTS: "CGO_ENABLED=0 GOOS={{OS}} GOARCH={{ARCH}}"
+    cmd: |
+      {{.GO_BUILD_OPTS}} go build -ldflags "{{.VERSION_LDFLAGS}}" -o {{.BUILD_DIR}}/nic-feature-discovery ./cmd/nic-feature-discovery/main.go
+    sources:
+      - cmd/**/*.go
+      - pkg/**/*.go
+    generates:
+      - "{{.BUILD_DIR}}/nic-feature-discovery"
+
+  test:
+    desc: run unit tests
+    vars:
+      COVER_MODE: atomic
+      GO_PKGS:
+        sh: go list ./... | grep -v "^nic-feature-discovery/vendor/" | grep -v ".*/mocks"
+    cmd: |
+      go test -covermode={{.COVER_MODE}} -coverprofile={{.COVER_PROFILE}} {{.GO_PKGS | catLines}}
+
+  lint:
+    desc: run lint tests
+    deps:
+      - install:golangci-lint
+    cmd: "{{.LOCAL_BIN}}/golangci-lint run --timeout 10m"
+  
+  generate-mocks:
+    desc: generate mock objects
+    deps:
+      - install:mockery
+    env:
+      PATH:
+        sh: "echo {{.LOCAL_BIN}}:$(PATH)"
+    cmds:
+      - cmd: "go generate ./..."
