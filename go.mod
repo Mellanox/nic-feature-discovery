@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/go-logr/logr v1.2.4
+	github.com/google/renameio/v2 v2.0.0
 	github.com/spf13/cobra v1.7.0
 	k8s.io/component-base v0.27.4
 	k8s.io/klog/v2 v2.100.1
