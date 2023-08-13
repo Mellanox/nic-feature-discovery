@@ -27,12 +27,17 @@ import (
 	"github.com/Mellanox/nic-feature-discovery/pkg/utils/filesystem"
 )
 
+const (
+	defaultNFDFeaturePath  = "/etc/kubernetes/node-feature-discovery/features.d/"
+	defaultFeatureFileName = "nvidia-com-nic-feature-discovery.features"
+)
+
 // New creates new Options
 func New() *Options {
 	return &Options{
-		NFDFeaturesPath:     "/etc/node-feature-discovery/features.d/",
-		FeatureFileName:     "nvidia-com-nic-feature-discovery.features",
-		FeatureScanInterval: 5 * time.Minute,
+		NFDFeaturesPath:     defaultNFDFeaturePath,
+		FeatureFileName:     defaultFeatureFileName,
+		FeatureScanInterval: 1 * time.Minute,
 		LogConfig:           logsapi.NewLoggingConfiguration(),
 	}
 }
@@ -65,6 +70,10 @@ func (o *Options) AddNamedFlagSets(sharedFS *cliflag.NamedFlagSets) {
 // Validate registered options
 func (o *Options) Validate() error {
 	var err error
+
+	if err = logsapi.ValidateAndApply(o.LogConfig, nil); err != nil {
+		return fmt.Errorf("failed to validate logging flags. %w", err)
+	}
 
 	if err = filesystem.FolderExist(o.NFDFeaturesPath); err != nil {
 		return fmt.Errorf("failed to validate NFD features path. %w", err)
