@@ -18,11 +18,12 @@ package filesystem
 
 import (
 	"fmt"
-	"os"
+
+	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
 )
 
 func FolderExist(path string) error {
-	fi, err := os.Stat(path)
+	fi, err := deps.OS.Stat(path)
 	if err != nil {
 		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
 	}
