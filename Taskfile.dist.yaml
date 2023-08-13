@@ -82,8 +82,5 @@ tasks:
     desc: generate mock objects
     deps:
       - install:mockery
-    env:
-      PATH:
-        sh: "echo {{.LOCAL_BIN}}:$(PATH)"
     cmds:
-      - cmd: "go generate ./..."
+      - cmd: "PATH={{.LOCAL_BIN}}:$PATH go generate ./..."
