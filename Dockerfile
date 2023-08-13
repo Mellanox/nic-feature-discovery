@@ -21,3 +21,5 @@ RUN task build
 FROM gcr.io/distroless/static-debian11:latest
 WORKDIR /
 COPY --from=builder /workspace/build/nic-feature-discovery .
+
+ENTRYPOINT [ "/nic-feature-discovery" ]
