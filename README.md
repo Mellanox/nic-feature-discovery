@@ -3,9 +3,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Mellanox/nic-feature-discovery)](https://goreportcard.com/report/github.com/Mellanox/nic-feature-discovery)
 [![Coverage Status](https://coveralls.io/repos/github/Mellanox/nic-feature-discovery/badge.svg?branch=main)](https://coveralls.io/github/Mellanox/nic-feature-discovery?branch=main)
-[![Build, Test, Lint](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/build-test-lint.yml/badge.svg?event=push)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/build-test-lint.yml)
-[![CodeQL](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/codeql.yml/badge.svg)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/codeql.yml)
-[![Image push](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/image-push-main.yml/badge.svg?event=push)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/image-push-main.yml)
+[![Build, Test, Lint](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/build-test-lint.yaml/badge.svg)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/build-test-lint.yaml)
+[![CodeQL](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/codeql.yaml/badge.svg)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/codeql.yaml)
+[![Image Push](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/image-push-main.yaml/badge.svg)](https://github.com/Mellanox/nic-feature-discovery/actions/workflows/image-push-main.yaml)
 
 - [nic-feature-discovery](#nic-feature-discovery)
   - [Overview](#overview)
