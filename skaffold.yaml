@@ -1,0 +1,21 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: nic-feature-discovery
+build:
+  artifacts:
+    - image: ghcr.io/mellanox/nic-feature-discovery
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  kustomize:
+    paths:
+      - deployment/k8s/base
+profiles:
+  - name: local-dev
+    manifests:
+      kustomize:
+        paths:
+          - deployment/k8s/overlays/dev
+    activation:
+      - command: dev

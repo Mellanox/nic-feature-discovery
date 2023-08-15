@@ -19,6 +19,10 @@
   - [Build and Run Locally](#build-and-run-locally)
     - [Prerequisites](#prerequisites-1)
     - [Build \& Run](#build--run)
+    - [Build \& Run in local K8s cluster](#build--run-in-local-k8s-cluster)
+      - [Install Prerequisites](#install-prerequisites)
+      - [Create local k8s development environment](#create-local-k8s-development-environment)
+      - [Cleanup local k8s development environment](#cleanup-local-k8s-development-environment)
 
 ## Overview
 
@@ -192,3 +196,29 @@ task build
 
 > __Note__: To build container image run `task image:build`. to deploy this image in your k8 cluster, you should re-tag and upload to your
 > own image registry, then create an overlay for exsiting deployment which overrides the image name with your own image path.
+
+
+### Build & Run in local K8s cluster
+
+For local development it is possible to use [skaffold](https://skaffold.dev/) to deploy
+local changes onto a local k8s cluster.
+
+#### Install Prerequisites
+
+1. [install Docker](https://docs.docker.com/engine/install/)
+2. [install minikube](https://minikube.sigs.k8s.io/docs/start/)
+3. [install skaffold](https://skaffold.dev/docs/install/#standalone-binary)
+
+#### Create local k8s development environment
+
+```shell
+task -o interleaved localdev:start
+```
+
+To trigger a rebuild, press any key in the current shell.
+
+#### Cleanup local k8s development environment
+
+```shell
+task -o interleaved localdev:clean
+```

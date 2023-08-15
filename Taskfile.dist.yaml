@@ -30,6 +30,7 @@ includes:
       BIN_DIR: "{{.LOCAL_BIN}}"
   kind: ./taskfiles/Kind.yaml
   image: ./taskfiles/Image.yaml
+  localdev: ./taskfiles/LocalDev.yaml
 
 tasks:
   clean:
