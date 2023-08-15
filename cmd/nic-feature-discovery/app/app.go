@@ -19,6 +19,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"github.com/go-logr/logr"
 	"github.com/spf13/cobra"
@@ -30,8 +31,14 @@ import (
 	_ "k8s.io/component-base/logs/json/register"
 
 	"github.com/Mellanox/nic-feature-discovery/cmd/nic-feature-discovery/app/options"
+	"github.com/Mellanox/nic-feature-discovery/pkg/daemon"
+	"github.com/Mellanox/nic-feature-discovery/pkg/feature"
 	"github.com/Mellanox/nic-feature-discovery/pkg/utils/signals"
 	"github.com/Mellanox/nic-feature-discovery/pkg/utils/version"
+	"github.com/Mellanox/nic-feature-discovery/pkg/writer"
+
+	// import feature sources
+	_ "github.com/Mellanox/nic-feature-discovery/pkg/feature/sources"
 )
 
 // NewNICFeatureDiscoveryCommand creates a new command
@@ -81,7 +88,11 @@ func NewNICFeatureDiscoveryCommand() *cobra.Command {
 func RunNICFeatureDiscovery(ctx context.Context, opts *options.Options) error {
 	logger := logr.FromContextOrDiscard(ctx)
 	logger.Info("start NIC feature discovery", "Options", opts)
-	<-ctx.Done()
+
+	labelWriter := writer.NewLabelWriter(filepath.Join(opts.NFDFeaturesPath, opts.FeatureFileName),
+		logger.WithName("label-writer"))
+	d := daemon.New(opts.FeatureScanInterval, labelWriter, feature.Sources)
+	d.Run(ctx)
 
 	return nil
 }

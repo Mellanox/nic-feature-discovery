@@ -14,23 +14,18 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package common
 
-import (
-	"fmt"
-
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+const (
+	DefaultPrefix = "nvidia.com"
 )
 
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
+// DefaultPrefixedKey creates a key with default prefix
+func DefaultPrefixedKey(key string) string {
+	return PrefixedKey(DefaultPrefix, key)
+}
 
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
-
-	return nil
+// PrefixedKey creates a prefixed key
+func PrefixedKey(prefix, key string) string {
+	return prefix + "/" + key
 }

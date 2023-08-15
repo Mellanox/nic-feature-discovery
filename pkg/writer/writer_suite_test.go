@@ -14,23 +14,16 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package writer_test
 
 import (
-	"fmt"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+	"testing"
 )
 
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
-
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
-
-	return nil
+func TestWriter(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "writer Suite")
 }

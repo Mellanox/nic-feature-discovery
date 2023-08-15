@@ -14,23 +14,27 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package common_test
 
 import (
-	"fmt"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+	"github.com/Mellanox/nic-feature-discovery/pkg/feature/internal/common"
+	"github.com/Mellanox/nic-feature-discovery/pkg/label"
 )
 
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
+var _ = Describe("GenericFeature tests", func() {
+	It("Return expected Name", func() {
+		gf := common.NewGenericFeature("testFeature")
+		Expect(gf.Name()).To(Equal("testFeature"))
+	})
 
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
-
-	return nil
-}
+	It("Return expected labels", func() {
+		gf := common.NewGenericFeature("testFeature")
+		Expect(gf.Labels()).To(BeEmpty())
+		gf.AddLabel("foo", "bar")
+		Expect(gf.Labels()).To(HaveLen(1))
+		Expect(gf.Labels()[0]).To(BeEquivalentTo(label.NewLabel("foo", "bar")))
+	})
+})

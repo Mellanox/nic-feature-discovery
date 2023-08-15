@@ -14,23 +14,25 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package common_test
 
 import (
-	"fmt"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+	"github.com/Mellanox/nic-feature-discovery/pkg/feature/internal/common"
 )
 
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
+var _ = Describe("Prefix Test", func() {
+	Context("PrefixedKey()", func() {
+		It("returns expected format", func() {
+			Expect(common.PrefixedKey("foo.bar", "baz")).To(Equal("foo.bar/baz"))
+		})
+	})
 
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
-
-	return nil
-}
+	Context("DefaultPrefixedKey()", func() {
+		It("returns expected format", func() {
+			Expect(common.DefaultPrefixedKey("foo")).To(Equal(common.DefaultPrefix + "/foo"))
+		})
+	})
+})

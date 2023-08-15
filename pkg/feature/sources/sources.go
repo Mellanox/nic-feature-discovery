@@ -14,23 +14,9 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package sources
 
 import (
-	"fmt"
-
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+	// feature sources imports
+	_ "github.com/Mellanox/nic-feature-discovery/pkg/feature/internal/driver"
 )
-
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
-
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
-
-	return nil
-}

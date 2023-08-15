@@ -14,23 +14,37 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
-package filesystem
+package feature
 
 import (
-	"fmt"
+	"context"
 
-	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
+	"github.com/Mellanox/nic-feature-discovery/pkg/label"
 )
 
-func FolderExist(path string) error {
-	fi, err := deps.OS.Stat(path)
-	if err != nil {
-		return fmt.Errorf("failed to run Stats on %s. %w", path, err)
-	}
+var Sources []Source
 
-	if !fi.IsDir() {
-		return fmt.Errorf("%s is not a folder", path)
-	}
+// Feature exposes a set of key,value lables
+//
+//go:generate mockery --name Feature
+type Feature interface {
+	// Name of Feature
+	Name() string
+	// Labels returns the list of Labels for Feature
+	Labels() []label.Label
+}
 
-	return nil
+// Source is a souce of features
+//
+//go:generate mockery --name Source
+type Source interface {
+	// Name of Source
+	Name() string
+	// Discover discovers Features
+	Discover(ctx context.Context) ([]Feature, error)
+}
+
+// AddToSources registers Sources
+func AddToSources(s Source) {
+	Sources = append(Sources, s)
 }
