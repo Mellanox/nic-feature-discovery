@@ -19,10 +19,12 @@
   - [Build and Run Locally](#build-and-run-locally)
     - [Prerequisites](#prerequisites-1)
     - [Build \& Run](#build--run)
-    - [Build \& Run in local K8s cluster](#build--run-in-local-k8s-cluster)
+    - [Build \& Run In K8s Cluster For Development](#build--run-in-k8s-cluster-for-development)
       - [Install Prerequisites](#install-prerequisites)
-      - [Create local k8s development environment](#create-local-k8s-development-environment)
-      - [Cleanup local k8s development environment](#cleanup-local-k8s-development-environment)
+      - [Local Cluster](#local-cluster)
+        - [Create Local K8s Development Environment](#create-local-k8s-development-environment)
+        - [Cleanup Local K8s Development Environment](#cleanup-local-k8s-development-environment)
+      - [Remote K8s Cluster (existing cluster)](#remote-k8s-cluster-existing-cluster)
 
 ## Overview
 
@@ -198,18 +200,21 @@ task build
 > own image registry, then create an overlay for exsiting deployment which overrides the image name with your own image path.
 
 
-### Build & Run in local K8s cluster
+### Build & Run In K8s Cluster For Development
 
-For local development it is possible to use [skaffold](https://skaffold.dev/) to deploy
-local changes onto a local k8s cluster.
+For development [skaffold](https://skaffold.dev/) is used to deploy
+local changes onto a K8s cluster.
 
 #### Install Prerequisites
 
 1. [install Docker](https://docs.docker.com/engine/install/)
-2. [install minikube](https://minikube.sigs.k8s.io/docs/start/)
-3. [install skaffold](https://skaffold.dev/docs/install/#standalone-binary)
+2. [install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+3. [install minikube](https://minikube.sigs.k8s.io/docs/start/)
+4. [install skaffold](https://skaffold.dev/docs/install/#standalone-binary)
 
-#### Create local k8s development environment
+#### Local Cluster
+
+##### Create Local K8s Development Environment
 
 ```shell
 task -o interleaved localdev:start
@@ -217,8 +222,25 @@ task -o interleaved localdev:start
 
 To trigger a rebuild, press any key in the current shell.
 
-#### Cleanup local k8s development environment
+##### Cleanup Local K8s Development Environment
 
 ```shell
 task -o interleaved localdev:clean
 ```
+
+#### Remote K8s Cluster (existing cluster)
+
+For this deployment option you should provide the following environment variables
+
+- `LOCALDEV_IMAGE_REPO`: image repository which skaffold will use.
+- `LOCALDEV_KUBECONFIG`: optional, path to kubeconfig file which will be used by skaffold to access k8s cluster.
+- `LOCALDEV_KUBECONTEXT`: optional. name of kube context which will be used by skaffold to access k8s cluster.
+
+```shell
+LOCALDEV_IMAGE_REPO=quay.io/myuser LOCALDEV_KUBECONTEXT=my-remote-cluster task -o interleaved localdev:deploy
+```
+
+To trigger a rebuild, press any key in the current shell.
+
+>__NOTE__: if `LOCALDEV_KUBECONFIG` and `LOCALDEV_KUBECONTEXT` are not provided, the current context pointed by
+> kubectl will be used.

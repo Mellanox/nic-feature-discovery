@@ -16,3 +16,13 @@
     clean:
       desc: clean local k8s dev cluster
       cmd: minikube --profile nfd-dev delete
+
+    deploy:
+      desc: deploy on pre-created cluster
+      vars:
+        LOCALDEV_IMAGE_REPO: '{{.LOCALDEV_IMAGE_REPO | default "harbor.mellanox.com/cloud-orchestration-dev"}}'
+        #LOCALDEV_KUBECONFIG: "/path/to/kubeconfig" <- optional, pass in via env var
+        #LOCALDEV_KUBECONTEXT: "kube-context-name" <- optional, pass in via env var
+      cmd: |
+        export SK_FLAGS="{{if .LOCALDEV_KUBECONFIG}}--kubeconfig={{.LOCALDEV_KUBECONFIG}}{{else}}{{if .LOCALDEV_KUBECONTEXT}}--kube-context={{.LOCALDEV_KUBECONTEXT}}{{end}}{{end}}"
+        skaffold dev --trigger=manual --default-repo={{.LOCALDEV_IMAGE_REPO}} $SK_FLAGS
