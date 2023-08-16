@@ -1,0 +1,28 @@
+  version: '3'
+
+  tasks:   
+    start:
+      desc: deploy using skaffold to k8s using current kube context (run with -o interleaved for interactive output)
+      vars:
+        NFD_VERSION: v0.13.3
+      cmd: |
+        minikube --profile nfd-dev start
+        # this one will point docker cli to the same daemon as used by minikube nfd-dev cluster
+        # that way skaffold will build images in the correct local repo.
+        eval $(minikube -p nfd-dev docker-env)
+        kubectl apply -k "https://github.com/kubernetes-sigs/node-feature-discovery/deployment/overlays/default?ref={{.NFD_VERSION}}"
+        skaffold dev --trigger=manual
+    
+    clean:
+      desc: clean local k8s dev cluster
+      cmd: minikube --profile nfd-dev delete
+
+    deploy:
+      desc: deploy on pre-created cluster
+      vars:
+        LOCALDEV_IMAGE_REPO: '{{.LOCALDEV_IMAGE_REPO | default "harbor.mellanox.com/cloud-orchestration-dev"}}'
+        #LOCALDEV_KUBECONFIG: "/path/to/kubeconfig" <- optional, pass in via env var
+        #LOCALDEV_KUBECONTEXT: "kube-context-name" <- optional, pass in via env var
+      cmd: |
+        export SK_FLAGS="{{if .LOCALDEV_KUBECONFIG}}--kubeconfig={{.LOCALDEV_KUBECONFIG}}{{else}}{{if .LOCALDEV_KUBECONTEXT}}--kube-context={{.LOCALDEV_KUBECONTEXT}}{{end}}{{end}}"
+        skaffold dev --trigger=manual --default-repo={{.LOCALDEV_IMAGE_REPO}} $SK_FLAGS

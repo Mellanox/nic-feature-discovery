@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nic-feature-discovery
+
+patches:
+  - target:
+      version: v1
+      group: apps
+      kind: DaemonSet
+      name: nic-feature-discovery-ds
+    patch: |-
+      - op: replace
+        path:  /spec/template/spec/containers/0/args
+        value: ["--v=5", "--logging-format=text"]
+
+resources:
+- ../default
