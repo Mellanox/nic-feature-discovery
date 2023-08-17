@@ -40,8 +40,8 @@ Fixes #1
 ## Contributing Code
 
 * Make sure to create an [Issue](https://github.com/Mellanox/nic-feature-discovery/issues) for bug fix or the feature request.
-* **For bugs**: For the bug fixes, please follow the issue template format while creating a issue.  If you have already found a fix, feel free to submit a Pull Request referencing the Issue you created. Include the `Fixes #` syntax to link it to the issue you're addressing.
-* **For feature requests**, For the feature requests, please follow the issue template format while creating a feature requests.
+* **For bugs**: For bug fixes, please follow the issue template format while creating a issue.  If you have already found a fix, feel free to submit a Pull Request referencing the Issue you created. Include the `Fixes #` syntax to link it to the issue you're addressing.
+* **For feature requests**, For feature requests, please follow the issue template format while creating a feature requests.
   * Please make sure each PR are compiling and CI checks are passing.
   * In order to ensure your PR can be reviewed in a timely manner, please keep PRs small.
 
