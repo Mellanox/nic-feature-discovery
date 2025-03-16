@@ -83,7 +83,6 @@ linters:
     - rowserrcheck
     - staticcheck
     - stylecheck
-    - tenv
     - thelper
     - tparallel
     - typecheck
@@ -91,6 +90,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - wastedassign
     - whitespace
     #- wsl
