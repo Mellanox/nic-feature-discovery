@@ -51,7 +51,7 @@ func NewNICFeatureDiscoveryCommand() *cobra.Command {
 		Long:         `NVIDIA NIC Feature Discovery`,
 		SilenceUsage: true,
 		Version:      version.GetVersionString(),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			if err := opts.Validate(); err != nil {
 				return fmt.Errorf("invalid config: %w", err)
 			}
