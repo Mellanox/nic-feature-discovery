@@ -38,8 +38,6 @@ linters:
     - errchkjson
     - errname
     - errorlint
-    - execinquery
-    - exportloopref
     - forbidigo
     - forcetypeassert
     - funlen

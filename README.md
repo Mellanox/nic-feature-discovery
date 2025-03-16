@@ -167,7 +167,7 @@ General flags:
 ### Prerequisites
 
 - The general [prerequitites](#prerequisites)
-- golang >= 1.20
+- golang >= 1.24
 
 ### Build & Run
 

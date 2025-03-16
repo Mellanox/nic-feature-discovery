@@ -20,7 +20,7 @@ tasks:
         vars:
           BIN_NAME: golangci-lint
           GO_REPO_PATH: github.com/golangci/golangci-lint/cmd/golangci-lint
-          VER: v1.53.3
+          VER: v1.64.7
           BIN_DIR: "{{.BIN_DIR}}"
 
   mockery:
