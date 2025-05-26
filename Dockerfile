@@ -18,8 +18,9 @@ RUN task build
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static-debian11:latest
+FROM nvcr.io/nvidia/distroless/go:v3.1.8
 WORKDIR /
 COPY --from=builder /workspace/build/nic-feature-discovery .
+COPY . /src
 
 ENTRYPOINT [ "/nic-feature-discovery" ]
