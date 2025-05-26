@@ -1,0 +1,1 @@
+include make/license.mk
