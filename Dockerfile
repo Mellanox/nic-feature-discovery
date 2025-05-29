@@ -34,7 +34,7 @@ RUN task build
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM nvcr.io/nvidia/distroless/go:v3.1.8
+FROM nvcr.io/nvidia/distroless/go:v3.1.9
 WORKDIR /
 COPY --from=builder /workspace/build/nic-feature-discovery .
 COPY . /src
