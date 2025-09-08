@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Go matrix
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
       - name: Check out code into the Go module directory
@@ -30,7 +30,7 @@ jobs:
     needs: build
     steps:
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 1.24.x
       - name: Check out code into the Go module directory
@@ -47,7 +47,7 @@ jobs:
     needs: build
     steps:
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 1.24.x
       - name: Check out code into the Go module directory
@@ -79,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 1.24.x
       # if this fails, run go mod tidy
@@ -91,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 1.24.x
       - name: Install Task
