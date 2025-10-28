@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/go-logr/logr v1.4.3
 	github.com/google/renameio/v2 v2.0.0
-	github.com/onsi/ginkgo/v2 v2.26.0
+	github.com/onsi/ginkgo/v2 v2.27.2
 	github.com/onsi/gomega v1.38.2
 	github.com/spf13/cobra v1.10.1
 	github.com/stretchr/testify v1.11.1
@@ -37,7 +37,6 @@ require (
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	go.uber.org/automaxprocs v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
