@@ -1,6 +1,6 @@
 module github.com/Mellanox/nic-feature-discovery
 
-go 1.24
+go 1.24.11
 
 require (
 	github.com/go-logr/logr v1.4.3
