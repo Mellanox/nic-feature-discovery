@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package filesystem contains filesystem validation helpers.
 package filesystem
 
 import (
@@ -22,6 +23,7 @@ import (
 	deps "github.com/Mellanox/nic-feature-discovery/pkg/dependencies"
 )
 
+// FolderExist validates that the provided path exists and is a directory.
 func FolderExist(path string) error {
 	fi, err := deps.OS.Stat(path)
 	if err != nil {

@@ -17,6 +17,7 @@
 package common
 
 const (
+	// DefaultPrefix is the default vendor prefix for generated feature labels.
 	DefaultPrefix = "nvidia.com"
 )
 

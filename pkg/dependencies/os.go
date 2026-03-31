@@ -14,6 +14,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+// Package dependencies wraps external dependencies to simplify testing.
 package dependencies
 
 import (
@@ -23,6 +24,7 @@ import (
 	"github.com/google/renameio/v2"
 )
 
+// OS provides access to filesystem operations and can be replaced in tests.
 var OS = NewOsImpl()
 
 // Os is an interface that wraps os package APIs
@@ -52,6 +54,7 @@ type Os interface {
 
 type osImpl struct{}
 
+// NewOsImpl creates a concrete Os implementation backed by the standard library.
 func NewOsImpl() Os {
 	return &osImpl{}
 }
@@ -81,6 +84,7 @@ func (o *osImpl) Remove(name string) error {
 // Because ReadFile reads the whole file, it does not treat an EOF from Read
 // as an error to be reported.
 func (o *osImpl) ReadFile(name string) ([]byte, error) {
+	// #nosec G304 -- this wrapper intentionally accepts dynamic paths from callers.
 	return os.ReadFile(name)
 }
 
