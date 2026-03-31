@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package feature defines feature discovery interfaces and source registration.
 package feature
 
 import (
@@ -22,6 +23,7 @@ import (
 	"github.com/Mellanox/nic-feature-discovery/pkg/label"
 )
 
+// Sources holds all registered feature sources.
 var Sources []Source
 
 // Feature exposes a set of key,value lables
