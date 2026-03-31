@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package writer persists discovered features to files.
 package writer
 
 import (

@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package common provides shared helpers for feature implementations.
 package common
 
 import (

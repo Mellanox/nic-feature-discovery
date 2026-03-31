@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package driver discovers NIC driver-related features.
 package driver
 
 import (

@@ -35,8 +35,8 @@ tasks:
       - task: go-install
         vars:
           BIN_NAME: golangci-lint
-          GO_REPO_PATH: github.com/golangci/golangci-lint/cmd/golangci-lint
-          VER: v1.64.7
+          GO_REPO_PATH: github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+          VER: v2.11.4
           BIN_DIR: "{{.BIN_DIR}}"
 
   mockery:

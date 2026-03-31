@@ -14,6 +14,7 @@
  SPDX-FileCopyrightText: Copyright 2023, NVIDIA CORPORATION & AFFILIATES
 */
 
+// Package signals provides helpers for graceful shutdown handling.
 package signals
 
 import (
