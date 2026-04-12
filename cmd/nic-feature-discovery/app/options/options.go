@@ -50,7 +50,7 @@ type Options struct {
 	LogConfig           *logsapi.LoggingConfiguration
 }
 
-// GetFlagSets returns FlagSet for Options
+// AddNamedFlagSets adds Option flags to the provided named flag sets.
 func (o *Options) AddNamedFlagSets(sharedFS *cliflag.NamedFlagSets) {
 	daemonFS := sharedFS.FlagSet("Feature Discovery Daemon")
 	daemonFS.StringVar(
