@@ -53,7 +53,7 @@ linters:
     #- goerr113
     - goheader
     #- gomnd
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - govet
