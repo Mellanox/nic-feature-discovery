@@ -55,6 +55,7 @@ var _ = Describe("Driver Source Tests", func() {
 			mockOS.On("Lstat", driver.Mlx5ModulePath).Return(nil, nil)
 			mockOS.On("Lstat", driver.Mlx5ModuleVersion).Return(nil, nil)
 			mockOS.On("ReadFile", driver.Mlx5ModuleVersion).Return([]byte("23.04-0.5.5.0"), nil)
+			mockOS.On("ReadFile", driver.KernelReleasePath).Return([]byte("5.15.0-140-generic\n"), nil)
 
 			features, err := ds.Discover(context.TODO())
 
@@ -83,6 +84,41 @@ var _ = Describe("Driver Source Tests", func() {
 
 			Expect(err).ToNot(HaveOccurred())
 			Expect(features).To(HaveLen(0))
+		})
+
+		It("discovers no features if driver is inbox in upstream kernel before 5.11", func() {
+			mockOS.On("Lstat", driver.Mlx5ModulePath).Return(nil, nil)
+			mockOS.On("Lstat", driver.Mlx5ModuleVersion).Return(nil, nil)
+			mockOS.On("ReadFile", driver.Mlx5ModuleVersion).Return([]byte("5.0-0\n"), nil)
+			mockOS.On("ReadFile", driver.KernelReleasePath).Return([]byte("5.4.0-216-generic\n"), nil)
+
+			features, err := ds.Discover(context.TODO())
+
+			Expect(err).ToNot(HaveOccurred())
+			Expect(features).To(HaveLen(0))
+		})
+
+		It("discovers no features if driver version is the kernel release", func() {
+			mockOS.On("Lstat", driver.Mlx5ModulePath).Return(nil, nil)
+			mockOS.On("Lstat", driver.Mlx5ModuleVersion).Return(nil, nil)
+			mockOS.On("ReadFile", driver.Mlx5ModuleVersion).Return([]byte("4.18.0-553.16.1.el8_10.x86_64\n"), nil)
+			mockOS.On("ReadFile", driver.KernelReleasePath).Return([]byte("4.18.0-553.16.1.el8_10.x86_64\n"), nil)
+
+			features, err := ds.Discover(context.TODO())
+
+			Expect(err).ToNot(HaveOccurred())
+			Expect(features).To(HaveLen(0))
+		})
+
+		It("fails if reading kernel release fails", func() {
+			mockOS.On("Lstat", driver.Mlx5ModulePath).Return(nil, nil)
+			mockOS.On("Lstat", driver.Mlx5ModuleVersion).Return(nil, nil)
+			mockOS.On("ReadFile", driver.Mlx5ModuleVersion).Return([]byte("23.04-0.5.5.0"), nil)
+			mockOS.On("ReadFile", driver.KernelReleasePath).Return(nil, errors.New("some error"))
+
+			_, err := ds.Discover(context.TODO())
+
+			Expect(err).To(HaveOccurred())
 		})
 
 		It("fails if reading driver version file fails", func() {
