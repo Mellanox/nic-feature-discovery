@@ -125,14 +125,20 @@ func (ds *driverSource) discoverMlxVerFeature(log logr.Logger) (feature.Feature,
 		return nil, fmt.Errorf("unexpected driver version(%q)", ver)
 	}
 
-	// inbox mlx5_core reports "5.0-0" in upstream kernels before 5.11 and the
-	// kernel release in some distribution kernels (e.g. RHEL 8)
-	kernelRelease, err := deps.OS.ReadFile(KernelReleasePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read kernel release. %w", err)
+	// inbox mlx5_core reports "5.0-0" in upstream kernels before 5.11
+	if ver == inboxMlx5Version {
+		log.V(3).Info("mlx5 driver version is of inbox driver", "version", ver)
+
+		return nil, errFeatureNotExist
 	}
 
-	if ver == inboxMlx5Version || ver == strings.TrimSpace(string(kernelRelease)) {
+	// inbox mlx5_core reports the kernel release in some distribution kernels
+	// (e.g. RHEL 8). If the kernel release cannot be read, report the version.
+	kernelRelease, err := deps.OS.ReadFile(KernelReleasePath)
+	if err != nil {
+		log.V(3).Info("failed to read kernel release, reporting driver version",
+			"path", KernelReleasePath, "version", ver, "error", err.Error())
+	} else if ver == strings.TrimSpace(string(kernelRelease)) {
 		log.V(3).Info("mlx5 driver version is of inbox driver", "version", ver)
 
 		return nil, errFeatureNotExist
