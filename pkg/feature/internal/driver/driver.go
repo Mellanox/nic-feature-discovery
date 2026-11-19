@@ -42,6 +42,10 @@ const (
 	Mlx5ModulePath = "/sys/module/mlx5_core"
 	// Mlx5ModuleVersion is the path to mlx5_core version file if exists.
 	Mlx5ModuleVersion = "/sys/module/mlx5_core/version"
+	// KernelReleasePath is the path to the running kernel release string
+	KernelReleasePath = "/proc/sys/kernel/osrelease"
+	// inboxMlx5Version is the version of inbox mlx5_core in upstream kernels before 5.11
+	inboxMlx5Version = "5.0-0"
 )
 
 var (
@@ -119,6 +123,25 @@ func (ds *driverSource) discoverMlxVerFeature(log logr.Logger) (feature.Feature,
 	ver := strings.TrimSpace(string(data))
 	if ver == "" {
 		return nil, fmt.Errorf("unexpected driver version(%q)", ver)
+	}
+
+	// inbox mlx5_core reports "5.0-0" in upstream kernels before 5.11
+	if ver == inboxMlx5Version {
+		log.V(3).Info("mlx5 driver version is of inbox driver", "version", ver)
+
+		return nil, errFeatureNotExist
+	}
+
+	// inbox mlx5_core reports the kernel release in some distribution kernels
+	// (e.g. RHEL 8). If the kernel release cannot be read, report the version.
+	kernelRelease, err := deps.OS.ReadFile(KernelReleasePath)
+	if err != nil {
+		log.V(3).Info("failed to read kernel release, reporting driver version",
+			"path", KernelReleasePath, "version", ver, "error", err.Error())
+	} else if ver == strings.TrimSpace(string(kernelRelease)) {
+		log.V(3).Info("mlx5 driver version is of inbox driver", "version", ver)
+
+		return nil, errFeatureNotExist
 	}
 
 	return common.NewGenericFeature(FeatureNameMofedVersion).
